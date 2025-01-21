@@ -19,12 +19,6 @@ public class UsersController {
     @Autowired
     private UserRepository userRepository;
 
-    /*@GetMapping("/{user_id}")
-    public ResponseEntity<Users> getUser(@PathVariable("user_id") Long user_id) {
-        //Users user = usersServiceImpl.getUserById(user_id);
-       return ResponseEntity.of(userRepository.findById(user_id));
-    }*/
-
     @GetMapping("/users/{user_id}")  // working one
     public Users getUser(@PathVariable Long user_id) {
         return userRepository.findById(user_id).orElse(null);
@@ -51,34 +45,6 @@ public class UsersController {
     public void deleteUser(@PathVariable Long user_id) {
         userRepository.deleteById(user_id);
     }
-
-    /*@GetMapping()
-    public ResponseEntity<List<Users>> getAllUsers() {
-        return ResponseEntity.of(Optional.of(userRepository.findAll()));
-    }
-
-    @PostMapping
-    public ResponseEntity<Users> createUser(@RequestBody Users user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(user));
-    }
-
-    @PutMapping("/{user_id}")
-    public ResponseEntity<Users> updateUser(@PathVariable Long id, @RequestBody Users userData) {
-        return userRepository.findById(id)
-                .map(user -> {
-                    user.setUsername(userData.getUsername());
-                    user.setEmail(userData.getEmail());
-                    user.setPhone_number(userData.getPhone_number());
-                    return ResponseEntity.ok(userRepository.save(user));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{user_id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }*/
 }
 
 

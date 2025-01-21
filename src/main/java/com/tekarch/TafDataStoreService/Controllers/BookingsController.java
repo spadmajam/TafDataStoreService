@@ -1,13 +1,10 @@
 package com.tekarch.TafDataStoreService.Controllers;
 
-import com.tekarch.TafDataStoreService.DTO.BookingRequest;
 import com.tekarch.TafDataStoreService.DTO.BookingResponseDTO;
-import com.tekarch.TafDataStoreService.Models.Bookings;
 import com.tekarch.TafDataStoreService.Repository.BookingRepository;
 import com.tekarch.TafDataStoreService.Repository.FlightRepository;
 import com.tekarch.TafDataStoreService.Repository.UserRepository;
 import com.tekarch.TafDataStoreService.Services.DataStoreServiceImpl;
-import com.tekarch.TafDataStoreService.Services.DataStoreServiceImpl_old;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,87 +55,21 @@ public class BookingsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBooking);
     }
 
-   /* //Create a new booking
-    @PostMapping("/bookings")
-    public ResponseEntity<Bookings> createBooking(@RequestBody BookingRequest booking) {
-        bookingRepository.save(booking);
-        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
-        //return ResponseEntity.ok(booking);
-    }*/
-
-    //////////////////////////////////////////////////////////////////////////
-    //Create a new booking -- working one-------> previous working
-    /*@PostMapping("/bookings")
-    public ResponseEntity<Bookings> createBooking(@RequestBody BookingRequest request) {
-        System.out.println("Received Booking: " + request);
-        Bookings booking = dataStoreService.createBooking(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
-        //return ResponseEntity.ok(booking);
-    }*/
-
-  /*  @PostMapping("/bookings")
-    public ResponseEntity<BookingResponseDTO> saveBooking(@RequestBody BookingResponseDTO booking) {
-        System.out.println("Received Booking: " + booking);*/
-
-    /*//Create a new booking -- working one
-    @PostMapping("/bookings")
-    public ResponseEntity<?> createBooking(@RequestBody BookingRequest request) {
-        BookingResponseDTO newbooking = dataStoreService.createBooking(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newbooking);
-        //return ResponseEntity.ok(booking);
-    }
-*/
-    //Retrieve all bookings of a user by ID -- working one
+    //Retrieve all bookings of a user by ID
     @GetMapping("/bookings/user/{userId}")
-    public ResponseEntity<?> getAllBookings(@PathVariable Long userId) {
-        try {
-            List<Bookings> bookings = dataStoreService.getUserBookings(userId);
+    public ResponseEntity<List<BookingResponseDTO>> getAllBookings(@PathVariable("userId") Long userId) {
+        /*try {
+            List<BookingResponseDTO> bookings = dataStoreService.getUserBookings(userId);
             return ResponseEntity.ok(bookings);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
+        }*/
 
-       /* if(bookings.isEmpty())
-        {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(bookingRepository.findByUser_Id(userId));*/
-    }
-
-    /*// CRUD for Flights
-    @GetMapping("/flights/{flight_id}")
-    public ResponseEntity<Flights> getFlight(@PathVariable Long flight_id) {
-        return ResponseEntity.of(flightRepository.findById(flight_id));
-    }
-
-    @PutMapping("/flights/{flight_id}")
-    public ResponseEntity<Flights> updateFlight(@PathVariable Long flight_id, @RequestBody Flights flightDetails) {
-        return flightRepository.findById(flight_id)
-                .map(flight -> {
-                    flightDetails.setAvailable_seats(flightDetails.getAvailable_seats());
-                    return ResponseEntity.ok(flightRepository.save(flight));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    // Get user ID
-    @GetMapping("/users/{user_id}")  // working one
-    public Users getUser(@PathVariable Long user_id) {
-        return userRepository.findById(user_id).orElse(null);
-    }*/
-
-   /* //Retrieve all bookings of a user by ID
-    @GetMapping("/bookings/users/{userId}")
-    public ResponseEntity<List<Bookings>> getAllBookings(@RequestParam Long userId) {
-        List<Bookings> bookings = dataStoreService.getUserBookings(userId);
-        if(bookings.isEmpty())
-        {
-            return ResponseEntity.noContent().build();
-        }
+        List<BookingResponseDTO> bookings = dataStoreService.getUserBookings(userId);
         return ResponseEntity.ok(bookings);
-    }*/
+    }
 
-    //Cancel a booking. Do not delete the record. Instead mark the status as cancelled  --  working one
+    //Cancel a booking. Do not delete the record. Instead mark the status as cancelled
     @DeleteMapping("/bookings/{booking_id}")
     public ResponseEntity<String> cancelBooking(@PathVariable Long booking_id) {
         boolean isCancelled = dataStoreService.cancelBooking(booking_id);

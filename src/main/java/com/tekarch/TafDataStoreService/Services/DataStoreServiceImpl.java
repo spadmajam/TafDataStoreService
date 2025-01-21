@@ -55,21 +55,8 @@ public class DataStoreServiceImpl {
         flight.setAvailable_seats(flight.getAvailable_seats() - 1);
         flightRepository.save(flight);
 
-// Convert to response DTO
+        // Convert to response DTO
         return mapToResponseDTO(savedBooking);
-
-
-    /*    // Map BookingResponseDTO to Booking entity
-        Bookings booking = new Bookings();
-        booking.(bookingRequest.getUser_id());
-        booking.setFlight_id(bookingRequest.getFlight_id());
-        booking.set(BookingStatus.BOOKED); // Set default status as BOOKED
-        booking.setCreatedAt(LocalDateTime.now());
-        booking.setUpdatedAt(LocalDateTime.now());
-
-        // Save to database
-        Booking savedBooking = bookingRepository.save(booking);*/
-
 
     }
 
@@ -85,13 +72,23 @@ public class DataStoreServiceImpl {
     }
 
     // Retrieve all bookings for a user
-    public List<Bookings> getUserBookings(Long userId)
+    public List<BookingResponseDTO> getUserBookings(Long user_id)
     {
-        List<Bookings> bookings = bookingRepository.findByUser_Id(userId);  // Assuming user has a OneToMany relationship with bookings
-        if (bookings.isEmpty()) {
-            throw new RuntimeException("No bookings found for user with ID: " + userId);
-        }
-        return bookings;
+        List<Bookings> bookings = bookingRepository.findByUser_Id(user_id);
+        return bookings.stream().map(this::mapToResponse).toList();
+
+    }
+
+    private BookingResponseDTO mapToResponse(Bookings booking)
+    {
+        return new BookingResponseDTO(
+                booking.getBookingId(),
+                booking.getUser().getId(),
+                booking.getFlight().getFlight_id(),
+                booking.getStatus(),
+                booking.getCreated_at(),
+                booking.getUpdated_at()
+        );
 
     }
 
@@ -114,8 +111,6 @@ public class DataStoreServiceImpl {
         }
     }
 
-
-
     //Cancel the booking. Set the status as "Cancel"
     public boolean cancelBooking(Long bookingId)
     {
@@ -128,7 +123,7 @@ public class DataStoreServiceImpl {
             bookingRepository.save(booking); // Save the updated booking
             return true;
         }
-        return false; // If booking doesn't exist
+        return false; // If booking doesn't exist it returns false
     }
 
 
