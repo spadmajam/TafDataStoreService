@@ -1,0 +1,9 @@
+package com.tekarch.TafDataStoreService.Controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/datastore")
+public class DataStoreServiceController {
+}
