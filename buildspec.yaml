@@ -5,6 +5,10 @@ phases:
     commands:
       - chmod +x ./gradlew
       - ./gradlew clean build
+      - echo Logging into Docker Hub...
+      - DOCKER_PASSWORD=satyapadmaja
+      - DOCKER_USERNAME=sDocker_123
+      - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
       - echo Logging in to Amazon ECR...
       - aws --version
       - REPOSITORY_URI=861276105150.dkr.ecr.us-east-1.amazonaws.com/datastorerepo
